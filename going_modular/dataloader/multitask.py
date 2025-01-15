@@ -125,7 +125,7 @@ class CustomExrDataset(Dataset):
         return weight_class
 
 
-class ConcatCustomExrDataset(Dataset):
+class ConcatCustomExrDatasetV3(Dataset):
     
     def __init__(self, dataset_dir:str, transform, train = True):
         self.metadata_path = os.path.join(dataset_dir, 'train_set.csv') if train else os.path.join(dataset_dir, 'test_set.csv')
@@ -244,8 +244,8 @@ def create_multitask_datafetcher(config, train_transform, test_transform) -> Tup
 
 
 def create_concat_multitask_datafetcher(config, train_transform, test_transform) ->Tuple[DataLoader, DataLoader]:
-    train_data = ConcatCustomExrDataset(config['dataset_dir'], train_transform)
-    test_data = ConcatCustomExrDataset(config['dataset_dir'], test_transform, train=False)
+    train_data = ConcatCustomExrDatasetV3(config['dataset_dir'], train_transform)
+    test_data = ConcatCustomExrDatasetV3(config['dataset_dir'], test_transform, train=False)
     
     train_dataloader = DataLoader(
         train_data,
