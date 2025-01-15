@@ -19,8 +19,11 @@ https://drive.google.com/drive/folders/1-1KWxxoID1SrKzs1BYvEj6whqBzz1LtW?usp=sha
 concat-albedo-depthmap (bản chất là normalmap-albedo): 3 - ngonluahoangkim
 concat-albedo-depthmap: 1 - ádfsadfsdfs
 concat-normalmap-depthmap: 2 - Sullyvan
-concat-all: 5
+concat-all: 5 (xong)
 
+albedo: 
+normalmap: 5 (BlueEyeWhiteDragon)
+depthmap: 
 # Khác concatall và concat-2
 hàm tạo dataloader
 Mạng V2 và V3
