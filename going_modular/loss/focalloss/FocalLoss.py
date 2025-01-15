@@ -1,6 +1,5 @@
 import torch
 import torch.nn.functional as F
-import pandas as pd
 
 # Đặt seed toàn cục
 seed = 42

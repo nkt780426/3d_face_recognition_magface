@@ -112,27 +112,15 @@ class MTLFaceRecognition(torch.nn.Module):
         ) = self.backbone(x)
         
         x_spectacles = self.spectacles_head.spectacle_embedding(x_spectacles)
-        x_da_spectacles = self.da_spectacles_head.spectacle_embedding(x_non_spectacles)
         
         x_facial_hair = self.facial_hair_head.facial_hair_embedding(x_facial_hair)
-        x_da_facial_hair = self.da_facial_hair_head.facial_hair_embedding(x_non_facial_hair)
         
         x_emotion = self.emotion_head.emotion_embedding(x_emotion)
-        x_da_emotion = self.da_emotion_head.emotion_embedding(x_non_emotion)
         
         x_pose = self.pose_head.pose_embedding(x_pose)
-        x_da_pose = self.da_pose_head.pose_embedding(x_non_pose)
         
         x_gender = self.gender_head.gender_embedding(x_gender)
-        x_da_gender = self.gender_head.gender_embedding(x_id)
         
         x_id = self.id_head.id_embedding(x_id)
         
-        return (
-                    (x_spectacles, x_da_spectacles), 
-                    (x_facial_hair, x_da_facial_hair),
-                    (x_pose, x_da_pose),
-                    (x_emotion, x_da_emotion),
-                    (x_gender, x_da_gender),
-                    x_id
-                )
+        return x_spectacles, x_facial_hair, x_pose, x_emotion, x_gender, x_id
