@@ -1,0 +1,1 @@
+1. Point cloud: là 1 tập hợp điểm trong không gian 3D, thường được sử dụng để mô tả hình dạng và cấu trúc của các đối tượng vật lý. Mỗi điểm trong đám mây có tọa độ (x, y, z) và có thể bao gồm các thông tin khác như màu sắc, độ cao hoặc mật độ. Ứng dụng

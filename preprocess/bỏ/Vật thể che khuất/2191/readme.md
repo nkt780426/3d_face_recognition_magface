@@ -1,0 +1,2 @@
+ID có 6 ảnh
+Ảnh này bị che khuất phần lớn khuôn mặt và trong dataset chỉ có 2 ảnh như vậy. Để tránh làm khó model và model đạt hiệu suất cao thì nên bỏ, mặc dù từ 1 phần khuôn mặt ta có thể nhận ra ngay người này bằng mắt thường, tuy nhiên đưa vào model nó hoạt động không thì không chắc.

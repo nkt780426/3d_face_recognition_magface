@@ -1,0 +1,48 @@
+1. Abstract (giới thiệu)
+- Mục tiêu: Giới thiệu ngắn gọn vấn đề và phương pháp chính.
+- Đóng góp: EfficientNet là phương pháp tối ưu hóa quá trình mở rộng mạng nơ-ron bằng cách cân bằng 3 yếu tố: độ sâu, chiều rộng, và độ phân giải.
+- Kết quả nổi bật: EfficientNet-B7 đạt độ chính xác 84.3% trên ImageNet với số tham số và FLOPS nhỏ hơn so với các mô hình khác.
+
+2. Introduction
+- Bối cảnh: Việc mở rộng mạng nơ-ron (scaling) là phương pháp phổ biến để cải thiện độ chính xác, nhưng các cách tiếp cận trước đây (chỉ mở rộng một chiều như độ sâu, chiều rộng hoặc độ phân giải) không hiệu quả.
+- Vấn đề: Làm thế nào để mở rộng mạng một cách cân bằng và hiệu quả?
+- Đề xuất: Sử dụng Compound Scaling, một phương pháp kết hợp các hệ số tỷ lệ cố định cho cả 3 yếu tố.
+- Đóng góp chính:
+- Phương pháp Compound Scaling.
+- Một mô hình baseline mới (EfficientNet-B0) được thiết kế bằng Neural Architecture Search.
+
+3. Related Work
+- Các nghiên cứu liên quan:
+    - Nâng cao độ chính xác (ConvNet Accuracy): Các mô hình như ResNet, SENet.
+    - Hiệu quả tính toán (ConvNet Efficiency): SqueezeNet, MobileNet, ShuffleNet.
+    - Mở rộng mạng (Model Scaling): ResNet mở rộng độ sâu, WideResNet mở rộng chiều rộng, các nghiên cứu tăng độ phân giải ảnh.
+
+- Điểm khác biệt: EfficientNet sử dụng phương pháp Compound Scaling, giúp cân bằng hiệu quả giữa độ chính xác và tài nguyên.
+
+4. Compound Model Scaling
+- Lý thuyết:
+    - Mô hình cơ bản (baseline) được mở rộng bằng cách tăng đồng thời độ sâu (𝑑), chiều rộng (𝑤), và độ phân giải (𝑟).
+    - Phương trình tối ưu:
+        d=αϕ ,w=βϕ ,r=γϕ
+        Với 𝛼,𝛽,𝛾 là các hệ số cố định tìm qua grid search, và 𝜙 là tham số kiểm soát tài nguyên.
+- Ưu điểm:
+    - Giảm thiểu không gian thiết kế.
+    - Duy trì hiệu quả tính toán.
+
+5. Effecient Architechture
+- Thiết kế baseline (EfficientNet-B0):
+    - Sử dụng Neural Architecture Search để tối ưu hóa độ chính xác và FLOPS.
+    - Mô hình dựa trên MobileNetV2 với các khối chính:
+        - MBConv: Depthwise Separable Convolution.
+        - Squeeze-and-Excitation: Cơ chế chú ý.
+- Mở rộng:
+    - Từ EfficientNet-B0, các mô hình từ B1 đến B7 được tạo ra bằng Compound Scaling.
+
+6. Experiments
+- Thí nghiệm trên ImageNet: EfficientNet-B7 đạt độ chính xác hàng đầu (84.3%) với số tham số ít hơn 8.4 lần so với GPipe
+- Thí nghiệm Transfer Learning: EfficientNet đạt kết quả tốt trên các bộ dữ liệu như CIFAR-100, Flowers, với ít tham số hơn các mô hình trước đây.
+7. Discussion
+- So sánh với các phương pháp khác:
+    - Compound Scaling vượt trội hơn việc chỉ mở rộng một chiều.
+    - Độ chính xác cao hơn với số FLOPS thấp hơn.
+- Phân tích: Compound Scaling giúp mô hình tập trung vào các vùng liên quan trong ảnh tốt hơn (sử dụng Class Activation Map).

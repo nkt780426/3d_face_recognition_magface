@@ -1,0 +1,2 @@
+ID có 2 ảnh như hình
+Biểu cảm hơi dị, có thể chấp nhận. Điểm mạnh của mô hình 3D so với 2D là có thể nhận diện được pose khó, illumination thay đổi và biểu cảm so với mô hình 2D. Nhưng em vẫn rén cho ảnh này vào
