@@ -9,13 +9,14 @@ class EmotionDetectModule(nn.Module):
     def __init__(self):
         super(EmotionDetectModule, self).__init__()
         out_neurons = 2
-        self.emotion_ouput_layer = nn.Sequential(
+        self.emotion_embedding = nn.Sequential(
             nn.BatchNorm2d(512),
             nn.AdaptiveAvgPool2d((1, 1)),
             nn.Flatten(),
-            nn.Linear(512, out_neurons),
         )
+        self.emotion_linear = nn.Linear(512, out_neurons)
 
     def forward(self, x_emotion):
-        x_emotion = self.emotion_ouput_layer(x_emotion)
+        x_emotion = self.emotion_embedding(x_emotion)
+        x_emotion = self.emotion_linear(x_emotion)
         return x_emotion

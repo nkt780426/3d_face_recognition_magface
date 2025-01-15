@@ -28,7 +28,7 @@ def compute_auc(
             
             images = images.to(device)
             # Trừ id, còn lại đều đã qua softmax
-            x_id, x_gender, x_pose, x_emotion, x_facial_hair, x_spectacles = model.get_embedding(images)
+            x_id, x_gender, x_pose, x_emotion, x_facial_hair, x_spectacles = model.get_result(images)
 
             # Append IDs and embeddings
             embeddings_list.append((id, x_id))

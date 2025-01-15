@@ -127,7 +127,6 @@ class CustomExrDataset(Dataset):
 
 class ConcatCustomExrDataset(Dataset):
     
-    
     def __init__(self, dataset_dir:str, transform, train = True):
         self.metadata_path = os.path.join(dataset_dir, 'train_set.csv') if train else os.path.join(dataset_dir, 'test_set.csv')
         split = 'train' if train else 'test'
@@ -165,22 +164,22 @@ class ConcatCustomExrDataset(Dataset):
     # Nhận vào index mà dataloader muốn lấy
     def __getitem__(self, index:int) -> Tuple[torch.Tensor, int]:
         albedo_path, normal_path, depth_path, label_index = self.data[index]
-        numpy_albedo = self.__load_numpy_image(albedo_path)
         numpy_normal = self.__load_numpy_image(normal_path)
+        numpy_albedo = self.__load_numpy_image(albedo_path)
         numpy_depth = self.__load_numpy_image(depth_path)
         gender, spectacles, facial_hair, pose, emotion = self.__extract_csv(albedo_path)
         
         if self.transform:
-            transformed = self.transform(image=numpy_albedo, depthmap=numpy_depth, normalmap=numpy_normal)
-            albedo = transformed['image']
-            depth = transformed['depthmap']
-            normal = transformed['normalmap']
+            transformed = self.transform(image=numpy_normal, albedo=numpy_albedo, depthmap=numpy_depth)
+            numpy_normal = transformed['image']
+            numpy_albedo = transformed['albedo']
+            numpy_depth = transformed['depthmap']
         
         # Stack các tensor lại thành một tensor duy nhất
         X = torch.stack((
-            torch.from_numpy(albedo).permute(2, 0, 1), 
-            torch.from_numpy(depth).permute(2, 0, 1),
-            torch.from_numpy(normal).permute(2, 0, 1)
+            torch.from_numpy(numpy_normal).permute(2, 0, 1),
+            torch.from_numpy(numpy_albedo).permute(2, 0, 1), 
+            torch.from_numpy(numpy_depth).permute(2, 0, 1)
         ), dim=0)
         y = torch.tensor([label_index, gender, spectacles, facial_hair, pose, emotion], dtype=torch.int)
         return X, y

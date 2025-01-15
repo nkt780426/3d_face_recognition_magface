@@ -73,7 +73,7 @@ class MagLinear(torch.nn.Module):
 class IdRecognitionModule(nn.Module):
     def __init__(self, num_classes):
         super(IdRecognitionModule, self).__init__()
-        self.id_ouput_layer = nn.Sequential(
+        self.id_embedding = nn.Sequential(
             nn.BatchNorm2d(512),
             nn.AdaptiveAvgPool2d((1, 1)),
             nn.Flatten(),
@@ -81,7 +81,7 @@ class IdRecognitionModule(nn.Module):
         self.maglinear = MagLinear(512, num_classes)
 
     def forward(self, x_id):
-        x_id = self.id_ouput_layer(x_id)
+        x_id = self.id_embedding(x_id)
         logits, x_norm = self.maglinear(x_id)
         return logits, x_norm
     
