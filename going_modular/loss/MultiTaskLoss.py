@@ -22,7 +22,7 @@ class MultiTaskLoss(torch.nn.Module):
         # 0: nhìn trực diện (2740), 1: nhìn nghiêng 1 chút (74)
         self.pose_loss = FocalLoss(alpha_weights={0: 0.0263, 1: 0.9737}, gamma_weights={0: 0, 1:2}, num_classes=2)
         # 0: nhìn trực diện (2162), 1: các cảm xúc khác (652)
-        self.emotion_loss = FocalLoss(alpha_weights={0:0.232, 1:0.768}, gamma_weights={0: 1, 1: 0}, num_classes=2)
+        self.emotion_loss = FocalLoss(alpha_weights={0:0.232, 1:0.768}, gamma_weights={0: 0, 1: 1}, num_classes=2)
         
         # hyper parameter
         self.spectacles_weight = loss_weight['loss_spectacles_weight']
