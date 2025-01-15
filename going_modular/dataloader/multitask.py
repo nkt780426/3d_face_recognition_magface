@@ -254,8 +254,8 @@ class ConcatCustomExrDatasetV2(Dataset):
     # Nhận vào index mà dataloader muốn lấy
     def __getitem__(self, index:int) -> Tuple[torch.Tensor, int]:
         type1_path, type2_path, label_index = self.data[index]
-        numpy_type1 = self.__load_numpy_image(type2_path)
-        numpy_type2 = self.__load_numpy_image(type1_path)
+        numpy_type1 = self.__load_numpy_image(type1_path)
+        numpy_type2 = self.__load_numpy_image(type2_path)
         gender, spectacles, facial_hair, pose, emotion = self.__extract_csv(type1_path)
         
         if self.transform:
