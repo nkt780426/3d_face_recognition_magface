@@ -7,10 +7,10 @@ from .WeightClassMagLoss import WeightClassMagLoss
 seed = 42
 torch.manual_seed(seed)
 
-class MultiTaskLoss(torch.nn.Module):
+class ConcatMultiTaskLoss(torch.nn.Module):
     
     def __init__(self, metadata_path:str, loss_weight:dict):
-        super(MultiTaskLoss, self).__init__()
+        super(ConcatMultiTaskLoss, self).__init__()
         
         self.id_loss = WeightClassMagLoss(metadata_path)
         # 0: female (235), 1: male (2579)
