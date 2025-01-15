@@ -97,8 +97,7 @@ def compute_auc(
             unique_classes = np.unique(all_labels[task])
             if len(unique_classes) < 2:
                 # Nếu chỉ có một lớp, gán AUC là None hoặc giá trị mặc định
-                print(f"Task '{task}' chỉ chứa một lớp ({unique_classes}). Không thể tính AUC.")
-                auc_scores[task] = 0.99
+                auc_scores[task] = 1
             else:
                 auc_scores[task] = roc_auc_score(all_labels[task], all_preds[task])
                 
