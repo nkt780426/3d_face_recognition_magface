@@ -168,4 +168,4 @@ class ConcatMTLFaceRecognitionV2(torch.nn.Module):
         x_spectacles = self.spectacles_head(spectacles_embedding)
 
         return id_embedding, x_gender, x_pose, x_emotion, x_facial_hair, x_spectacles
-    
+        
