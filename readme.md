@@ -13,6 +13,9 @@
 3d_face_recognition_magface/
 ├── checkpoint/                     # các experments (jupyter) và tensorboard logs + models
 │   ├── concat2/                    # experment concat đôi một normal map, depthmap, albedo
+│       ├── logs/
+│       ├── models/
+│       ├── experments.ipynb
 │   ├── concat3/                    # experment concat cả 3 loại dữ liệu
 │   └── multi/                      # experment chỉ có 1 loại dữ liệu
 ├── doc/                            # Slide + Kiến thức
