@@ -52,7 +52,7 @@ Dataset download tại: https://www.kaggle.com/datasets/blueeyewhitedaragon/hoan
 
 **Đưa các file jupyter (experment) muốn chạy vào thư mục root project này và chạy**
 - Code có thể có bug khi chạy, do trong quá trình làm đồ án mình đã sửa đổi rât nhiều để phù hợp với tính huống gần nhất. (chủ yếu nằm ở phần dataloader và trong jupyter, còn lại code bình thường)
-- Nếu muốn tính thêm chỉ số accuracy, un
+- Nếu muốn tính thêm chỉ số accuracy, chỉnh lại phần comment ở file utils/roc_auc.py (làm vậy với model thu được sau cùng chứ ko nên làm trong quá trình train)
 - Chú ý cần đọc kỹ cẩn thận lại trước khi chạy các đường dẫn checkpoint khi chạy các experments.
 - File requirements.txt có thể ko hoàn chỉnh
 - Muốn code nhanh, hay chạy trên máy cá nhân trước (wsl hoặc ubuntu) rồi mới chạy trên kaggle
