@@ -1,1 +1,0 @@
-ID có rất nhiều ảnh (trên 40)

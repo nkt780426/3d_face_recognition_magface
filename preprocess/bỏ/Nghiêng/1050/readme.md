@@ -1,1 +1,0 @@
-ID này có nhiều ảnh nhất trong dataset

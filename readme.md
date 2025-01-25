@@ -1,71 +1,73 @@
-# Kiến thức
+# Đóng góp đồ án
 
-1. Kiến thức
-- Phương án 1: Triplet loss + iresnet 18:
-    - Xử lý dữ liệu và chia dataset
-        - Photometric Stereo: điều kiện tạo ảnh, 
-        - MTCNN
-        - Under sample thế nào
-    - Mạng và loss:
-        - Mạng iresnet18 so với resnet truyền thống
-        - Triplet loss.
-    - Các kết luận rút ra được từ thực nghiệm:
-    - Đọc lại quyển
-    - Tham số đánh giá AUC và điểm yếu của nó với triplet loss và phương án Magface.
+1. Xây dựng bộ nhận diện khuôn mặt sử dụng dữ liệu 2D và dữ liệu 3D tăng cường từ phương pháp Photometric Stereo để cải thiện hiệu suất của mô hình.
+2. Sử dụng Multi task để học tách biệt feature map của ảnh sao cho không liên quan đến kính, râu, pose, emotion, giới tính.
+    - Kết quả pose và emotion không được tốt do cách đánh label không thể hiện được tính chất của lớp đó.
+    - Ví dụ: Để phân loại Pose tốt nhất cần đánh lable nó theo độ thay vì 0 (nhìn chính diện) và 1 (chứa các pose khác và lớp này sẽ rất khó học). Tương tự với emotion trong dataset sử dụng 2 label 0 và 1
+    - Lược bỏ dataset để ko học lớp này nữa sẽ cho hiệu suất tốt hơn nhưng bộ nhận diện không có khả năng học độc lập về Pose và emotion
+3. Sử dụng focal loss để cân bằng dữ liệu trong mỗi task.
 
-- Phương án 2: Multi task
-    - Mạng iresnet 18: cải tiến bằng Prelu thay vì relu => Ý nghĩa học số âm tốt hơn không bị ignore như relu
-    - 
+# Cấu trúc Project
 
-# Slide
-1. Giới thiệu đề tài: 
-    - Ứng dụng thực tiễn của nhận diện khuôn mặt, nó quan trọng nhiều nghiên cứu
-    - Các nhược điểm của hệ thống FR ảnh 2D như ánh sáng, pose, emotion, ... 3D là gì
+```plaintext
+3d_face_recognition_magface/
+├── checkpoint/                     # các experments (jupyter) và tensorboard logs + models
+│   ├── concat2/                    # experment concat đôi một normal map, depthmap, albedo
+│   ├── concat3/                    # experment concat cả 3 loại dữ liệu
+│   └── multi/                      # experment chỉ có 1 loại dữ liệu
+├── doc/                            # Slide + Kiến thức
+├── Dataset/                        # Dataset sau tiền xử lý
+│   ├── Albedo/                     
+│   ├── Depth_Map/
+│   ├── Normal_Map/
+│   └── train_set.csv               # metadata train set
+│   └── test_set.csv                # metadata validate set
+│   └── gallery_set.csv             # metadata test set (gallery set + probe set)
+├── going_modular/                  # package multi task + magface để viết các experments đơn giản hơn
+│   └── dataloader/                 # dataloader từng loại dữ liệu và data prefetch
+│   └── loss/                       # cách tính multi task toàn mạng (focal loss + magface)
+│   └── model/                      # kiến trúc mạng multi task
+│   └── train_eval/                 # train loop + eval loop
+│   └── utils/                      # các hàm phụ phục vụ huấn luyện như tính auc, acc, model checkpoint, early stopping, ...
+├── preprocess/                     # tiền xử lý và phân tích dữ liệu từ dataset gốc (không quan tâm nếu đã có thư mục Dataset)
+├── test_models/
+│   └── multi/                      # experment test dữ liệu (gallery+probe) với bộ nhận diện đơn và concat
+│       └── gallery_db.csv          # vector database chứa dữ liệu gallery set
+│       └── gallery_remaining.csv   # metadata probe set
+│       └── gallery.csv             # metadata gallery set
+│       └── multi_model.ipynb       # expertment test dữ liệu với mạng concat
+│       └── single_model.ipynb      # expertment test dữ liệu với mạng đơn
+│   └── triplet/                    # experment test dữ liệu với bộ nhận diện triplet loss ở project khác.
+│   └── test.ipynb                  # experment đọc tensorboard log
+├── .gitignore
+└── README.md
+```
 
-2. Các hướng tiếp cận
-    - 4 hướng, đề cập đến phương pháp của mình
+Dataset download tại: https://www.kaggle.com/datasets/blueeyewhitedaragon/hoangvn-3dmultitask (sử dụng version 1, không dùng version 2)
 
-3. Đề xuất
-    - Gồm 3 bước tiền xử lý, huấn luyện và chạy thực nghiệm
-        - Để loại bỏ ảnh hưởng của ánh sáng => Photometric stereo => Cần ít nhất 3 ảnh vs 3 nguồn sáng khác nhau => Tính ra normalmap kèm theo các ảnh dephmap và albedo
-        - Để giảm thiểu tác động của ngoại cảnh => MTCNN để crop mặt
-    - Phân tích sự phân bổ của dataset => Để việc tối ưu embedding bằng multi task với 5 task để chia embedding thành 6 thành phần
-        - Sử dụng chiến lược ... để chia cân bằng theo tỷ lệ các task.
-        - Xử lý việc mất cân bằng dữ liệu các task bằng focal loss.
-        - Đề xuất sử dụng MagFace loss, adaptive angular margin tiên tiến (dẫn chứng research nó tốt hơn arcface - 1 tiêu chuẩn của hệ thống nhận diện khuôn mặt hiện nay) để học embedding về id. Kết hợp với weight class để giảm thiểu mất cân bằng dữ liệu.
-    - Mạng backbone: iresnet (ưu điểm so với resnet truyền thống) và thay PRelu
-    - Đề xuất kiến trúc mạng MTL Face học tách biệt các task
-        - Ví dụ tách biệt spectacles (kính)
-        - Module attention (concat thế nào giữa 2 chiều C và spatial)
-        - Sử dụng GRL học đối kháng
-    - Giới thiệu các mạng concat 2 và 3 để cải thiện hiệu suất
-    - Data Augmentation giảm thiểu overfit
-        - Random Noise và RandomCrop, kiểm soát sự random giống nhau để mạng concat có hiệu suất tốt hơn.
-    - Các tham số huấn luyện.
+# Cách chạy project
 
-4. Kết quả thực nghiệm
-    - Các kết quả auc multitask.
-    - Code phần gallery để lấy được ảnh so sánh với gallery, chứng minh nó ko ảnh hưởng bởi kính và emotion.
+**Đưa các file jupyter (experment) muốn chạy vào thư mục root project này và chạy**
+- Code có thể có bug khi chạy, do trong quá trình làm đồ án mình đã sửa đổi rât nhiều để phù hợp với tính huống gần nhất. (chủ yếu nằm ở phần dataloader và trong jupyter, còn lại code bình thường)
+- Nếu muốn tính thêm chỉ số accuracy, un
+- Chú ý cần đọc kỹ cẩn thận lại trước khi chạy các đường dẫn checkpoint khi chạy các experments.
+- File requirements.txt có thể ko hoàn chỉnh
+- Muốn code nhanh, hay chạy trên máy cá nhân trước (wsl hoặc ubuntu) rồi mới chạy trên kaggle
 
-# Research
-- MagFace: https://arxiv.org/abs/2103.06627
-- MTLface: https://arxiv.org/pdf/2103.01520
-- Iresnet: https://arxiv.org/pdf/2004.04989
+# Hướng cải thiện
 
+1. Kiến trúc mạng
+- Trong project này ở mỗi head mình sử dụng fully connected 512 neutron để lưu trữ thông tin các embedding với mỗi task. Điều này chỉ phù hợp với task cuối (nhận diện danh tính), còn các task còn lại như nhận diện kính, râu, giới tính, ... rất lãng phí. Có thể xem xét giảm kích thước embedding cho các task này cho phù hợp.
+- Với mạng concat 2 hoặc 3 loại dữ liệu, train sẽ rất lâu do mình thêm bộ nhận diện fully connected 512 sau khi concat các embedding của các backbone. Ví dụ concat 3 embedđing được 1536 -> đi vào fully connected 512. Train đoạn này rất lâu. Có thể thay thế lớp fully connected layer đó bằng Conv 1x1 hoặc self-attention, hoặc gì đó để giảm chi phí tính toán các mạng concat giúp train nhanh hơn và có thể tốt hơn.
 
-https://drive.google.com/drive/folders/1-1KWxxoID1SrKzs1BYvEj6whqBzz1LtW?usp=sharing
+2. Bỏ task emotion + pose.
+- Dựa vào file metadata, lọc lại dataset bằng folder preprocess, chỉ giữ lại ảnh có thuộc tính emotion là nhìn trực diện và pose nhìn thẳng (mất khoảng 1k ảnh)
+- Tạo dataset mới dựa trên dataset đã lọc
+- *Mình đã thử và kết quả cho rất tốt (là cái dataset kaggle version 2). Các mạng đơn đều cho 97 -> 99%, các mạng concat thì chưa thử*
+- Lý do học 2 task này ko tốt: label gán nhãn ko đủ tốt. Ví dụ có rất nhiều emotion như cười, nói, ... đều được chia thành nhìn trục diện và không nhìn trực diện (cái ko nhìn này học ko tốt)
 
-concat-albedo-depthmap (bản chất là normalmap-albedo): 3 - ngonluahoangkim
-concat-albedo-depthmap: 1 - ádfsadfsdfs
-concat-normalmap-depthmap: 2 - Sullyvan
-concat-all: 5 (xong)
+3. Train lại với dữ liệu 2D gốc (4 ảnh .bmp) để làm căn cứ so sánh với bộ nhận diện sử dụng dữ liệu Photometric Stereo.
 
-albedo: 6 - Sullyvan2002(fix focal loss) -
-normalmap: 5 - BlueEyeWhiteDragon        -
-depthmap: 1 - ádfsadfsdfs                -
+4. Triển khai bộ nhận diện trên thiết bị thật.
 
-normalmap-albedo: 3 - ngonluahoangkim
-normalmap-depthmap: 2 - Sullyvan         -
-albedo-depthmap: 1- ádfsadfsdfs          -
-
-all: 5 
+5. Tái tạo dataset mới từ mạng embedding đã học được. Chi tiết đọc research MTL Face.

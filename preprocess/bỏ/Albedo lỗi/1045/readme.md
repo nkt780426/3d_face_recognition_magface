@@ -1,1 +1,0 @@
-Bỏ vì ID này còn các ảnh khác thay thế như trong phần tổng quan

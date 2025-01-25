@@ -91,6 +91,18 @@ def compute_auc(
         all_labels['id_cosine'] = np.array(cosine_labels)
         all_preds['id_cosine'] = np.array(cosine_scores)
         
+        # # Calculate accuracy for Euclidean distance
+        # euclidean_optimal_idx = np.argmax(tpr_euclidean - fpr_euclidean) # Chọn ngưỡng tại điểm có giá trị tpr - fpr lớn nhất trên đường ROC, vì đây là nơi tối ưu hóa sự cân bằng giữa tỷ lệ phát hiện (TPR) và tỷ lệ báo động giả (FPR).
+        # euclidean_optimal_threshold = thresholds_euclidean[euclidean_optimal_idx]
+        # euclidean_pred_labels = (euclidean_pred_scores >= euclidean_optimal_threshold).astype(int)
+        # euclidean_accuracy = accuracy_score(euclidean_true_labels, euclidean_pred_labels)
+
+        # # Calculate accuracy for Cosine similarity
+        # cosine_optimal_idx = np.argmax(tpr_cosine - fpr_cosine)
+        # cosine_optimal_threshold = thresholds_cosine[cosine_optimal_idx]
+        # cosine_pred_labels = (cosine_pred_scores >= cosine_optimal_threshold).astype(int)
+        # cosine_accuracy = accuracy_score(cosine_true_labels, cosine_pred_labels)
+        
         # Tính AUC cho từng tác vụ
         auc_scores = {}
         for task in all_labels:
@@ -102,3 +114,4 @@ def compute_auc(
                 auc_scores[task] = roc_auc_score(all_labels[task], all_preds[task])
                 
         return auc_scores
+    
