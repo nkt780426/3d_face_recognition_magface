@@ -1,10 +1,10 @@
 # Đóng góp đồ án
 
-1. Xây dựng bộ nhận diện khuôn mặt sử dụng dữ liệu 2D và dữ liệu 3D tăng cường từ phương pháp Photometric Stereo để cải thiện hiệu suất của mô hình.
-2. Sử dụng Multi task để học tách biệt feature map của ảnh sao cho không liên quan đến kính, râu, pose, emotion, giới tính.
+1. Xây dựng bộ nhận diện khuôn mặt sử dụng dữ liệu 2D và 3D tăng cường từ phương pháp Photometric Stereo.
+2. Sử dụng Multi task để học tách biệt feature map của ảnh sao cho không liên quan đến kính, râu, pose, emotion, giới tính. Từ đó thu được feature map tốt hơn cho bài toán nhận diện danh tính.
     - Kết quả pose và emotion không được tốt do cách đánh label không thể hiện được tính chất của lớp đó.
-    - Ví dụ: Để phân loại Pose tốt nhất cần đánh lable nó theo độ thay vì 0 (nhìn chính diện) và 1 (chứa các pose khác và lớp này sẽ rất khó học). Tương tự với emotion trong dataset sử dụng 2 label 0 và 1
-    - Lược bỏ dataset để ko học lớp này nữa sẽ cho hiệu suất tốt hơn nhưng bộ nhận diện không có khả năng học độc lập về Pose và emotion
+    - Ví dụ: Để phân loại Pose tốt, cần đánh lable theo độ thay vì 0 (nhìn chính diện) và 1 (chứa các pose khác và lớp này sẽ rất khó học do các mẫu trong lớp này có các pose khác nhau). Tương tự, học task emotion cũng ko tốt.
+    - Lược bỏ dataset để ko học 2 task này. Mô hình sẽ có hiệu suất tốt hơn nhưng không có khả năng học độc lập về Pose và emotion
 3. Sử dụng focal loss để cân bằng dữ liệu trong mỗi task.
 
 # Cấu trúc Project
@@ -50,12 +50,12 @@ Dataset download tại: https://www.kaggle.com/datasets/blueeyewhitedaragon/hoan
 
 # Cách chạy project
 
-**Đưa các file jupyter (experment) muốn chạy vào thư mục root project này và chạy**
-- Code có thể có bug khi chạy, do trong quá trình làm đồ án mình đã sửa đổi rât nhiều để phù hợp với tính huống gần nhất. (chủ yếu nằm ở phần dataloader và trong jupyter, còn lại code bình thường)
-- Nếu muốn tính thêm chỉ số accuracy, chỉnh lại phần comment ở file utils/roc_auc.py (làm vậy với model thu được sau cùng chứ ko nên làm trong quá trình train)
-- Chú ý cần đọc kỹ cẩn thận lại trước khi chạy các đường dẫn checkpoint khi chạy các experments.
-- File requirements.txt có thể ko hoàn chỉnh
-- Muốn code nhanh, hay chạy trên máy cá nhân trước (wsl hoặc ubuntu) rồi mới chạy trên kaggle
+**Đưa các file jupyter (experment) muốn chạy vào thư mục root của project này và chạy bình thường**
+- Code có thể có 1 chút bug khi chạy, do trong quá trình làm đồ án mình đã sửa đổi rât nhiều để phù hợp với tính huống gần nhất. (chủ yếu nằm ở phần dataloader và trong jupyter, còn lại code bình thường)
+- Nếu muốn tính thêm chỉ số accuracy, chỉnh lại phần comment ở file utils/roc_auc.py (nên làm với model thu được sau cùng chứ ko nên làm trong quá trình train)
+- Chú ý cần đọc kỹ cẩn thận lại các đường dẫn lưu log và models.
+- File requirements.txt ko hoàn chỉnh
+- Muốn code nhanh, hay chạy trên máy cá nhân trước (wsl hoặc ubuntu) rồi mới chạy trên kaggle.
 
 # Hướng cải thiện
 
