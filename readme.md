@@ -63,7 +63,7 @@ Dataset download tại [đây](https://www.kaggle.com/datasets/blueeyewhitedarag
 - Học tách biệt từng task: thay vì train cùng 1 lúc nhiều task như kiểu mình. Hãy train 1 task, 1 thời điểm, khi nào task đó tốt rồi thì freeze nhánh chứa task đó lại rồi tiếp tục học các task khác.
 
 2. Task emotion + pose.
-- Trong dataset gốc, 2 task này không được đánh nhị phân mà có khoảng 4-5 label. Có thể xem xét dữ nguyên các label này thay vì gộp lại thành task nhị phân như của mình. *Lý do mình gộp 2 task này lại thành task nhị phân là do mình không tinh chỉnh được tham số alpha, gamma của focal loss với task có nhiều label, loss càng học càng tăng.*
+- Trong dataset gốc, 2 task này không được đánh nhị phân mà có khoảng 4-5 label. Có thể thử giữ nguyên các label này thay vì gộp lại thành task nhị phân như của mình. *Lý do mình gộp 2 task này lại thành task nhị phân là do mình không tinh chỉnh được tham số alpha, gamma của focal loss cho phù hợp trong trường hợp với task có nhiều hơn 2 label, loss càng học càng tăng. Chỉ có đưa về 2 label mình mới tinh chỉnh được focal loss, mặc dù accuracy tốt nhưng kết quả test chỉ nhận diện tốt với label 0.*
 - *Mình đã thử lọc lại dataset sao cho chỉ có pose trực diện và emotion nhìn thẳng, qua đó bỏ được 2 task này ra khỏi mạng multi task từ đó cho kết quả tốt hơn (là cái dataset kaggle version 2, mất 1000k phiên chụp so với dataset gốc). Các mạng đơn đều cho 97 -> 99% khi test, các mạng concat thì chưa thử nhưng chắc tốt hơn. Nhược điểm khi bỏ 2 task là bộ nhận diện không thể nhận diện được khuôn mặt có pose và emotion thay đổi.*
 
 3. Train lại với dữ liệu 2D gốc (4 ảnh .bmp) để làm căn cứ so sánh với bộ nhận diện sử dụng dữ liệu Photometric Stereo.
