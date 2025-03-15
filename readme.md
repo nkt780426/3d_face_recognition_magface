@@ -1,10 +1,18 @@
+# Vấn đề
+
+Các bộ nhận diện khuôn mặt hiện nay chủ yếu được huấn luyện dựa trên mô hình và dữ liệu 2D. Tuy nhiên các bộ nhận diện khuôn mặt sử dụng dữ liệu 2D thường gặp phải việc suy giảm hiệu suất nghiệm trọng khi do ảnh hưởng của điều kiện chiếu sáng (illumination), góc chụp (pose), các điều kiện che khuất (kính, khẩu trang, ...) và cảm xúc (emotion). Điều này là do
+
+1. Điều kiện chiếu sáng: Bản chất ảnh 2D chỉ cung cấp cho máy tính thông tin về màu sắc của vật thể. Tuy nhiên thông tin này bị ảnh hưởng mạnh bởi điều kiện ánh sáng như thông lượng ánh sáng, khoảng cách từ người đến camera, độ bao phủ của nguồn sáng lên vật thể, ... Do đó cùng 1 người trong các điều kiện ánh sáng khác nhau sẽ cho ra ảnh 2D khác nhau. Điều này ảnh hưởng đến quá trình học của máy tính.
+2. Góc chụp và cảm xúc: Ảnh 2D không cung câp thông tin chiều sâu của vật thể như ảnh 3D. Do đó cùng 1 người chụp dưới các điều kiện góc chụp và cảm xúc khác nhau sẽ cho các hình dạng khác nhau gây khó khăn trong quá trình học của máy tính.
+3. Các điều kiện che khuất: Khi huấn luyện bộ nhận diện, embedding được trích xuất ra từ ảnh chưa thực sự tối ưu cho tác vụ nhận diện khuôn mặt. Nó có thể chứa các yếu tố như môi trường, các vật thể che khuất như kính, khẩu trang, ... Đặc biệt là khi các yếu tố này quá lớn có thể che khuất đi các đặc điểm đặc trưng để nhận diện khuôn mặt, tệ hơn bộ nhận diện có thể nhận diện nhầm các yếu tố che khuất của ảnh là đặc điểm nhận dạng của khuôn mặt.
+
+Trong khi đó các bộ nhận diện 3D thường cho hiệu suất nhận diện tốt hơn do dữ liệu 3D không bị ảnh hưởng bởi điều kiện chiếu sáng, cung cấp thông tin 3 chiều nên không bị ảnh hưởng bởi góc chụp và cảm xúc. Ngoài ra các bộ nhận diện 3D có khả năng chống giả mạo tốt hơn. Tuy nhiên việc huấn luyện dữ liệu 3D thường rất đắt đỏ do yêu cầu dữ liệu 3D, tài nguyên tính toán lớn và tốc độ nhận diện chậm hơn so với các bộ nhận diện 2D
+
 # Đóng góp đồ án
 
-1. Xây dựng bộ nhận diện khuôn mặt 3D sử dụng dữ liệu 2D mang thông tin 3D từ phương pháp Photometric Stereo.
-2. Sử dụng Multi task để học tách biệt feature map của ảnh sao cho không liên quan đến kính, râu, pose, emotion, giới tính. Từ đó thu được feature map tốt hơn cho bài toán nhận diện danh tính.
-    - Kết quả 2 task pose và emotion không được tốt do cách đánh label không thể hiện được tính chất của lớp đó (train kết quả cao nhưng khi test vẫn sai). Lý do: 
-        - Với task Pose, mình đánh lable là 0 (nhìn trực diện) và 1 (nghiêng 1 chút, nghiêng 30-45 độ, nghiêng 90 độ). Điều này khiến task có label 1 học không được tốt, do các ảnh trong label này khác biệt rất nhiều về tính chất. Tương tự với task emotion. 
-3. Sử dụng focal loss để cân bằng dữ liệu trong mỗi task.
+1. Xây dựng **bộ nhận diện khuôn mặt 3D** bằng việc sử dụng **dữ liệu 2D mang thông tin 3D từ phương pháp Photometric Stereo**.
+2. Sử dụng các công nghệ tiên tiến như **MagFace loss** để cải thiện hiệu suất của bộ nhận diện, **MTLFace (một mô hình multitask) để học tách biệt feature map** của ảnh sao cho thu được feature map không liên quan đến kính, râu, pose, emotion, giới tính. Từ đó thu được embedding tối ưu hơn phục vụ bài toán nhận diện khuôn mặt.
+3. Sử dụng **focal loss** giải quyết vấn đề dataset mất cần bằng trong mỗi tác vụ
 
 # Cấu trúc Project
 
@@ -46,28 +54,3 @@
 ```
 
 Dataset download tại [đây](https://www.kaggle.com/datasets/blueeyewhitedaragon/hoangvn-3dmultitask/versions/1) (sử dụng version 1, không dùng version 2)
-
-# Cách chạy project
-
-**Đưa các file jupyter (experment) muốn chạy vào thư mục root của project này và chạy bình thường**
-- Code có thể có 1 chút bug khi chạy, do trong quá trình làm đồ án mình đã sửa đổi rât nhiều để phù hợp với tính huống gần nhất. (chủ yếu nằm ở phần dataloader và trong jupyter, còn lại code bình thường)
-- Nếu muốn tính thêm chỉ số accuracy, chỉnh lại phần comment ở file utils/roc_auc.py (nên làm với model thu được sau cùng chứ ko nên làm trong quá trình train)
-- Chú ý cần đọc kỹ cẩn thận lại các đường dẫn lưu log và models.
-- File requirements.txt ko hoàn chỉnh
-- Muốn code nhanh, hay chạy trên máy cá nhân trước (wsl hoặc ubuntu) rồi mới chạy trên kaggle.
-
-# Hướng cải thiện
-
-1. Kiến trúc mạng
-- Với mạng concat 2 hoặc 3 loại dữ liệu, train sẽ rất lâu do mình thêm bộ nhận diện fully connected 512 sau khi concat các embedding của các backbone. Ví dụ concat 3 embedđing được 1536 -> đi vào fully connected 512. Train đoạn này rất lâu. Có thể thay thế lớp fully connected layer đó bằng Conv 1x1 hoặc self-attention, hoặc gì đó để giảm chi phí tính toán các mạng concat giúp train nhanh hơn và có thể tốt hơn.
-- Học tách biệt từng task: thay vì train cùng 1 lúc nhiều task như kiểu mình. Hãy train 1 task, 1 thời điểm, khi nào task đó tốt rồi thì freeze nhánh chứa task đó lại rồi tiếp tục học các task khác.
-
-2. Task emotion + pose.
-- Trong dataset gốc, 2 task này không được đánh nhị phân mà có khoảng 4-5 label. Có thể thử giữ nguyên các label này thay vì gộp lại thành task nhị phân như của mình. *Lý do mình gộp 2 task này lại thành task nhị phân là do mình không tinh chỉnh được tham số alpha, gamma của focal loss cho phù hợp trong trường hợp với task có nhiều hơn 2 label, loss càng học càng tăng. Chỉ có đưa về 2 label mình mới tinh chỉnh được focal loss, mặc dù accuracy tốt nhưng kết quả test chỉ nhận diện tốt với label 0.*
-- *Mình đã thử lọc lại dataset sao cho chỉ có pose trực diện và emotion nhìn thẳng, qua đó bỏ được 2 task này ra khỏi mạng multi task từ đó cho kết quả tốt hơn (là cái dataset kaggle version 2, mất 1000k phiên chụp so với dataset gốc). Các mạng đơn đều cho 97 -> 99% khi test, các mạng concat thì chưa thử nhưng chắc tốt hơn. Nhược điểm khi bỏ 2 task là bộ nhận diện không thể nhận diện được khuôn mặt có pose và emotion thay đổi.*
-
-3. Train lại với dữ liệu 2D gốc (4 ảnh .bmp) để làm căn cứ so sánh với bộ nhận diện sử dụng dữ liệu Photometric Stereo.
-
-4. Triển khai bộ nhận diện trên thiết bị thật.
-
-5. Tái tạo dataset mới từ embedding đã học được. Chi tiết đọc research MTL Face.
