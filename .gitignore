@@ -7,9 +7,6 @@ Dataset/
 Dataset.zip
 **logs**
 **models**
-doc/backbone
-doc/loss
-doc/photometric stereo
-doc/survey
-doc/multi
+**doc**
 preprocess/bỏ
+Photometric_DB*
