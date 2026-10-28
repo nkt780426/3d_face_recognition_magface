@@ -10,3 +10,4 @@ albumentations
 scikit-image
 seaborn
 termcolor
+timm

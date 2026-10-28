@@ -27,7 +27,7 @@ def fit(
     early_stopping: MultiMetricEarlyStopping,
     model_checkpoint: ModelCheckpoint
 ):
-    log_dir = os.path.abspath(conf['checkpoint_dir'] + conf['type'] + '/logs')
+    log_dir = os.path.abspath(conf['experiment_dir'] + '/logs')
     writer = SummaryWriter(log_dir=log_dir)
     device = conf['device']
     
@@ -152,8 +152,8 @@ def fit(
         model_checkpoint(model, optimizer, epoch + 1)
         early_stopping([test_id_cosine_auc, test_id_euclidean_auc], model, epoch + 1)
         
-        # if early_max_stopping.early_stop and early_min_stopping.early_stop:
-        #     break
+        if early_stopping.early_stop:
+            break
         
         scheduler.step(epoch)
         

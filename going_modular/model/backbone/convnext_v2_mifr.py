@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-import timm 
+import timm
 
 class SPPModule(nn.Module):
     def __init__(self, pool_mode='avg', sizes=(1, 2, 3, 6)):

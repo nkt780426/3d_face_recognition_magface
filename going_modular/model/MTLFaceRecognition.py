@@ -8,6 +8,7 @@ from .head.pose import PoseDetectModule
 from .head.spectacles import SpectacleDetectModule
 
 from .backbone.mifr import create_miresnet
+from .backbone.convnext_v2_mifr import create_miconvnextv2
 
 from .grl import GradientReverseLayer
 
@@ -20,7 +21,15 @@ class MTLFaceRecognition(torch.nn.Module):
 
     def __init__(self, backbone:str, num_classes:int):
         super(MTLFaceRecognition, self).__init__()
-        self.backbone = create_miresnet(backbone)
+        
+        # Backbone
+        if 'convnext' in backbone:
+            
+            self.backbone = create_miconvnextv2(backbone)
+        else:
+            
+            from .backbone.mifr import create_miresnet
+            self.backbone = create_miresnet(backbone)
         
         # Head
         self.id_head = IdRecognitionModule(num_classes)

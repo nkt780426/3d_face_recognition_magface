@@ -8,7 +8,7 @@ torch.manual_seed(seed)
 class PoseDetectModule(nn.Module):
     def __init__(self):
         super(PoseDetectModule, self).__init__()
-        out_neurons = 2
+        out_neurons = 3
         self.pose_embedding = nn.Sequential(
             nn.BatchNorm2d(512),
             nn.AdaptiveAvgPool2d((1, 1)),

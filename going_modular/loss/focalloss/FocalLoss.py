@@ -55,6 +55,7 @@ class FocalLoss(torch.nn.Module):
     def forward(self, y_pred, y_true):
         y_pred = F.softmax(y_pred, dim=1)
         y_true = y_true.long()
+        
         y_pred_correct_class = y_pred.gather(1, y_true.unsqueeze(1)).squeeze(1)
         
         # Lấy alpha cho từng nhãn
